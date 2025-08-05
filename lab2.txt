@@ -1,0 +1,48 @@
+Payment Processing
+Add:
+Process: Process Payment (End-user → Order)
+Data Flows:
+"Payment Request"
+"Payment Confirmation"
+
+Threats:
+Information Disclosure
+
+
+Driver-End-User Communication
+Add:
+Process: In-App Messaging (Driver ↔ End-user)
+Data Flow:
+"Delivery Message"
+Threats:
+Spoofing: Fake "delivered" messages.
+Mitigation: Message signing with driver’s private key.
+Information Disclosure: Chat logs exposed.
+Mitigation: E2E encryption, ephemeral messages.
+
+Restaurant Menu Management
+Add:
+Process: Update Menu (Restaurant → Restaurant Datastore)
+Data Flow:
+"Menu Edits"
+Threats:
+Elevation of Privilege: Unauthorized staff edits menu.
+Mitigation: Role-based access control (RBAC).
+
+Driver Order Batching
+Add:
+Process: Combine Orders (Driver → Order System)
+Data Flow:
+"Batch Request" 
+Threats:
+Tampering: Malicious order grouping.
+Mitigation: Server-side validation of batch logic.
+
+GPS Route Optimization
+Add:
+Process: Calculate Route (Driver App → Mapping Service)
+Data Flow:
+"Route Data" 
+Threats:
+Spoofing: Fake "efficient route" leading to unsafe areas.
+Mitigation: Verify routes with trusted APIs (e.g., Google Maps).
