@@ -1,0 +1,132 @@
+{
+  "summary": {
+    "title": "ShareNote Threat Model",
+    "owner": "Your Name",
+    "description": "Threat model for ShareNote collaborative note-taking app."
+  },
+  "detail": {
+    "contributors": [],
+    "diagrams": [
+      {
+        "cells": [
+          /* ===== ACTORS ===== */
+          {
+            "shape": "actor",
+            "id": "end-user",
+            "position": { "x": 100, "y": 100 },
+            "data": {
+              "name": "End-User",
+              "description": "Authenticated user who creates and shares notes.",
+              "type": "tm.Actor"
+            }
+          },
+          {
+            "shape": "actor",
+            "id": "shared-user",
+            "position": { "x": 100, "y": 250 },
+            "data": {
+              "name": "Shared User",
+              "description": "User accessing notes via shared links.",
+              "type": "tm.Actor"
+            }
+          },
+          {
+            "shape": "actor",
+            "id": "public-user",
+            "position": { "x": 100, "y": 400 },
+            "data": {
+              "name": "Public User",
+              "description": "Anonymous user viewing public notes.",
+              "type": "tm.Actor"
+            }
+          },
+          {
+            "shape": "process",
+            "id": "web-server",
+            "position": { "x": 400, "y": 200 },
+            "data": {
+              "name": "Web Server",
+              "description": "Handles HTTP requests and business logic.",
+              "type": "tm.Process"
+            }
+          },
+          {
+            "shape": "store",
+            "id": "database",
+            "position": { "x": 700, "y": 200 },
+            "data": {
+              "name": "Database",
+              "description": "Stores notes, comments, and user data.",
+              "type": "tm.Store",
+              "isEncrypted": true
+            }
+          },
+
+          /* ===== DATA FLOWS ===== */
+          {
+            "shape": "flow",
+            "id": "create-note-flow",
+            "source": { "cell": "end-user" },
+            "target": { "cell": "web-server" },
+            "data": {
+              "name": "Create Note",
+              "description": "Encrypted note content (text/images/links).",
+              "isEncrypted": true,
+              "threats": [
+                {
+                  "title": "Tampering: Malicious content in note",
+                  "type": "Tampering",
+                  "status": "Mitigated",
+                  "mitigation": "Input sanitization; CSP headers."
+                }
+              ]
+            }
+          },
+          {
+            "shape": "flow",
+            "id": "store-note-flow",
+            "source": { "cell": "web-server" },
+            "target": { "cell": "database" },
+            "data": {
+              "name": "Store Note",
+              "description": "Encrypted note data saved to DB.",
+              "isEncrypted": true
+            }
+          },
+          {
+            "shape": "flow",
+            "id": "share-link-flow",
+            "source": { "cell": "web-server" },
+            "target": { "cell": "end-user" },
+            "data": {
+              "name": "Shared Link",
+              "description": "HMAC-signed URL for note access.",
+              "threats": [
+                {
+                  "title": "Spoofing: Forged shared links",
+                  "type": "Spoofing",
+                  "status": "Mitigated",
+                  "mitigation": "Expiring tokens; link revocation."
+                }
+              ]
+            }
+          },
+
+          /* ===== TRUST BOUNDARY ===== */
+          {
+            "shape": "trust-boundary-curve",
+            "id": "secured-zone",
+            "source": { "x": 300, "y": 50 },
+            "target": { "x": 800, "y": 350 },
+            "data": {
+              "name": "On-Premises Secured Zone",
+              "description": "Protected by firewall and reverse proxy."
+            }
+          }
+        ],
+        "title": "ShareNote Data Flow Diagram"
+      }
+    ]
+  },
+  "version": "2.4.1"
+}
